@@ -1,4 +1,4 @@
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import User
 from django.shortcuts import render,redirect
 
@@ -23,17 +23,18 @@ def login(request):
         print(emailid,pwd)
         user = authenticate(request,username=emailid,password=pwd)
         if user is not None:
+            login(request,user)
             return redirect('todoapp')
         else:
-            print("Invalid login")
+            return render(request,'login')
 
 
-    return render(request,'todoapp.html')
+    return render(request,'login.html')
 
 def todoapp(request):
     if request.method == 'POST':
         title = request.POST.get('title')
         print(title)
-        obj = models.TODOAPP(title=title)
+        obj = models.TODOAPP(title=title,user=request.user)
         obj.save()
     return render(request,'todoapp.html')
