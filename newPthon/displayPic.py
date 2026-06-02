@@ -3,7 +3,7 @@ import sys
 from PyQt6.QtCore import Qt
 from PyQt6.QtGui import QPixmap
 from PyQt6.QtWidgets import QApplication, QWidget, QLabel, QMainWindow, QGridLayout, QCheckBox, QComboBox, QListWidget, \
-    QLineEdit, QSpinBox,QSlider
+    QLineEdit, QSpinBox, QSlider, QDial
 
 
 class MainWindow(QMainWindow):
@@ -50,6 +50,13 @@ class MainWindow(QMainWindow):
         slider.sliderMoved.connect(lambda value: print("Slider moved:", value))
         slider.sliderReleased.connect(lambda: print("Slider released"))
         slider.sliderPressed.connect(lambda: print("Slider pressed"))
+        ## QDial
+        dial = QDial()
+        dial.setRange(0, 360)
+        dial.setNotchesVisible(True)
+        dial.setSingleStep(10)
+        dial.valueChanged.connect(lambda value: print("Dial value:", value))
+
 
         layout = QGridLayout()
         image_files=[
@@ -73,6 +80,7 @@ class MainWindow(QMainWindow):
         layout.addWidget(QLabel("Hello"), 6, 2, 1, 3)
         layout.addWidget(spinBox, 7, 0, 1, 3)
         layout.addWidget(slider, 8, 0, 1, 3)
+        layout.addWidget(dial, 9, 0, 1, 3)
         central_widget.setLayout(layout)
         self.setCentralWidget(central_widget)
         self.show()
