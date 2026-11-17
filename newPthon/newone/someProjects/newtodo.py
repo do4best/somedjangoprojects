@@ -1,12 +1,12 @@
 from PyQt6.QtCore import QAbstractTableModel, Qt
 from MyMain import MyMain,mymainrun
-from todo1 import Ui_Form
+from todo2 import Ui_MainWindow
 
 
 class TodoModel(QAbstractTableModel):
-    def __init__(self,todo=None):
+    def __init__(self,todos=None):
         super().__init__()
-        self.todos = todo or []
+        self.todos = todos or []
 
     def data(self, index, role):
         if role == Qt.ItemDataRole.DisplayRole:
@@ -20,12 +20,12 @@ class TodoModel(QAbstractTableModel):
 
 
 
-class NewTodo(MyMain,Ui_Form):
+class NewTodo(MyMain,Ui_MainWindow):
     def __init__(self):
-        MyMain.__init__(self)
+        super().__init__()
         self.setupUi(self)
-        self.model = TodoModel()
-        self.todoView.setModel(self.model)
+        self.model = TodoModel(todos=[(False,"Python with QT")])
+        self.dispList.setModel(self.model)
 
 
 
