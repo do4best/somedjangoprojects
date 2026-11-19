@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>407</width>
-    <height>369</height>
+    <height>344</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,16 +20,16 @@
       <x>20</x>
       <y>19</y>
       <width>371</width>
-      <height>121</height>
+      <height>141</height>
      </rect>
     </property>
-    <widget class="QLineEdit" name="lineEdit">
+    <widget class="QListView" name="todolistView">
      <property name="geometry">
       <rect>
-       <x>0</x>
+       <x>5</x>
        <y>0</y>
-       <width>371</width>
-       <height>121</height>
+       <width>361</width>
+       <height>141</height>
       </rect>
      </property>
     </widget>
@@ -60,7 +60,7 @@
      <string>Complete</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_2">
+   <widget class="QLineEdit" name="addtodoEdit">
     <property name="geometry">
      <rect>
       <x>20</x>
@@ -68,6 +68,9 @@
       <width>371</width>
       <height>41</height>
      </rect>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignCenter</set>
     </property>
     <property name="placeholderText">
      <string>Enter Your Activity</string>
@@ -86,16 +89,6 @@
      <string>Add To Do</string>
     </property>
    </widget>
-  </widget>
-  <widget class="QMenuBar" name="menubar">
-   <property name="geometry">
-    <rect>
-     <x>0</x>
-     <y>0</y>
-     <width>407</width>
-     <height>21</height>
-    </rect>
-   </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
