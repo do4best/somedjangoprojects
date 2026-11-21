@@ -1,23 +1,43 @@
-import os
-
+from pathlib import Path
 from PyQt6.QtCore import QAbstractTableModel, Qt, QModelIndex
 from PyQt6.QtGui import QImage
 
 from MyMain import MyMain,mymainrun
 from todo import Ui_MainWindow
-import sys
+import json
 
-base_dir = os.path.dirname(__file__)
-tick = QImage(os.path.join(base_dir, 'check.png'))
+
+base_dir = Path(__file__).parent
+tick = QImage(str(base_dir/'check.png'))
+json_file = base_dir/'todos.json'
 
 
 class TodoModel(QAbstractTableModel):
     def __init__(self,*args,todos=None,**kwargs):
         super().__init__(*args,**kwargs)
         self.todos = todos or []
+        self.loadtodos()
 
-    def data(self, index, role):
-        status, text = self.todos[index.row()]
+    def savetodos(self):
+        with open('todos.json','w') as f:
+            json.dump(self.todos,f,indent=4)
+
+    def loadtodos(self):
+        try:
+            with open('todos.json','r') as f:
+                data = json.load(f)
+
+
+            self.todos = [tuple(item) for item in data]
+
+        except FileNotFoundError:
+            self.todos = []
+
+
+    def data(self,index, role=Qt.ItemDataRole.DisplayRole):
+
+
+
         if role == Qt.ItemDataRole.DisplayRole:
             status, text = self.todos[index.row()]
             return text
@@ -27,10 +47,12 @@ class TodoModel(QAbstractTableModel):
             if status:
                 return tick
 
-    def rowCount(self, index):
+        return  None
+
+    def rowCount(self, parent=QModelIndex()):
         return len(self.todos)
 
-    def columnCount(self, parent):
+    def columnCount(self, parent=QModelIndex()):
         return 1
 
 
@@ -54,7 +76,9 @@ class NewTodo(MyMain,Ui_MainWindow):
             self.model.beginInsertRows(QModelIndex(), row, row)
             self.model.todos.append((False,text))
             self.model.endInsertRows()
+            self.model.savetodos()
             self.model.layoutChanged.emit()
+
             self.addtodoEdit.clear()
 
     def delTodo(self):
@@ -65,7 +89,9 @@ class NewTodo(MyMain,Ui_MainWindow):
             self.model.beginRemoveRows(QModelIndex(), row,row)
             del self.model.todos[row]
             self.model.endRemoveRows()
+            self.model.savetodos()
             self.model.layoutChanged.emit()
+
             self.todolistView.clearSelection()
 
     def complete(self):
@@ -75,6 +101,7 @@ class NewTodo(MyMain,Ui_MainWindow):
             row  = index.row()
             status,text = self.model.todos[row]
             self.model.todos[row] = (True,text)
+            self.model.savetodos()
             print(self.model.todos)
             self.model.dataChanged.emit(index,index)
             self.todolistView.clearSelection()
